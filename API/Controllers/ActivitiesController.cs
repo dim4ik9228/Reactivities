@@ -1,8 +1,6 @@
 using Application.Activities;
 using Domain;
-using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
@@ -41,6 +39,5 @@ namespace API.Controllers
             await Mediator.Send(new Delete.Command { Id = id });
             return Ok();
         }
-
     }
 }
