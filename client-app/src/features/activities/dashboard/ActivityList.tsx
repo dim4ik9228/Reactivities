@@ -1,17 +1,28 @@
 import { Divider, Paper, Typography, Button, Box } from "@mui/material";
 import { Activity } from "../../../app/models/Activity";
 import './fad.css'
+import { LoadingButton } from "@mui/lab";
+import { SyntheticEvent, useState } from "react";
 
 interface Props {
     activity: Activity;
     selectActivity: (id: string) => void;
     deleteActivity: (id: string) => void;
+    submitting: boolean
 }
 
 export default function ActivityList({ activity,
     selectActivity,
-    deleteActivity
+    deleteActivity,
+    submitting
 }: Props) {
+    const [target, setTarget] = useState('');
+
+    function handleActivityDelete(e: SyntheticEvent<HTMLButtonElement>, id: string) {
+        setTarget(e.currentTarget.name);
+        deleteActivity(id);
+    }
+
     return (
         <Paper square elevation={0}>
             <Box
@@ -49,16 +60,18 @@ export default function ActivityList({ activity,
                     </Typography>
                 </Box>
                 <Box sx={{ alignSelf: "end", display: "flex", gap: 1 }}>
-                    <Button
+                    <LoadingButton
+                        name={activity.id}
                         className="viewListButton"
-                        onClick={() => deleteActivity(activity.id)}
+                        onClick={(e) => handleActivityDelete(e, activity.id)}
                         variant="contained"
                         disableElevation
                         color="error"
                         sx={{ borderRadius: "4px" }}
+                        loading={submitting && target === activity.id}
                     >
                         Delete
-                    </Button>
+                    </LoadingButton>
                     <Button
                         className="viewListButton"
                         onClick={() => selectActivity(activity.id)}

@@ -1,52 +1,23 @@
 import { Button, Paper, Stack, TextField, createTheme } from "@mui/material";
 import { Activity } from "../../../app/models/Activity";
-import { ChangeEvent, useState } from "react";
-
-const cancelTheme = createTheme({
-  components: {
-    MuiButton: {
-      styleOverrides: {
-        contained: {
-          backgroundColor: "#bdbdbd", // Customize the cancel button's background color for the main state
-          "&:hover": {
-            backgroundColor: "#757575", // Customize the cancel button's background color for the hover state
-          },
-          "&:active": {
-            backgroundColor: "#424242", // Customize the cancel button's background color for the active state
-          },
-        },
-      },
-    },
-  },
-});
-
-const submitTheme = createTheme({
-  components: {
-    MuiButton: {
-      styleOverrides: {
-        contained: {
-          backgroundColor: "#4CAF50", // Customize the submit button's background color for the main state
-          "&:hover": {
-            backgroundColor: "#45A049", // Customize the submit button's background color for the hover state
-          },
-          "&:active": {
-            backgroundColor: "#388E3C", // Customize the submit button's background color for the active state
-          },
-        },
-      },
-    },
-  },
-});
+import { ChangeEvent, useEffect, useState } from "react";
+import { DateTimeField, LocalizationProvider } from "@mui/x-date-pickers";
+import dayjs, { Dayjs } from "dayjs";
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LoadingButton } from "@mui/lab";
 
 interface Props {
   activity: Activity | undefined;
   closeForm: () => void;
   createOrEdit: (activity: Activity) => void;
+  submitting: boolean
 }
 
 export default function ActivityForm({ activity: selectedActivity,
   closeForm,
-  createOrEdit }: Props) {
+  createOrEdit,
+  submitting
+}: Props) {
   const initialState = selectedActivity ?? {
     id: '',
     title: '',
@@ -59,13 +30,27 @@ export default function ActivityForm({ activity: selectedActivity,
 
   const [activity, setActivity] = useState(initialState);
 
+  const [selectedDate, setSelectedDate] = useState<Dayjs | null>(null);
+
+  useEffect(() => {
+    if (activity.date) {
+      const initialDate = dayjs(activity.date);
+      setSelectedDate(initialDate);
+    }
+  }, [activity.date]);
+
   function handleSubmit() {
+    activity.date = selectedDate!.toISOString();
     createOrEdit(activity);
   }
 
   function handleInputChange(event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
     const { name, value } = event.target;
     setActivity({ ...activity, [name]: value })
+  }
+
+  function handleDateChange(date: Dayjs | null) {
+    setSelectedDate(date);
   }
 
   return (
@@ -98,15 +83,14 @@ export default function ActivityForm({ activity: selectedActivity,
             size="small"
             onChange={handleInputChange}
           />
-          <TextField
-            value={activity.date}
-            name="date"
-            label="Date"
-            multiline
-            variant="outlined"
-            size="small"
-            onChange={handleInputChange}
-          />
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DateTimeField
+              name="date"
+              label="Date"
+              value={selectedDate}
+              onChange={handleDateChange}
+            />
+          </LocalizationProvider>
           <TextField
             value={activity.city}
             name="city"
@@ -127,14 +111,12 @@ export default function ActivityForm({ activity: selectedActivity,
           />
 
           <Stack direction="row" spacing={1} justifyContent="flex-end">
-            <Button variant="contained" onClick={closeForm} //theme={cancelTheme}
-            >
+            <Button variant="contained" onClick={closeForm}>
               Cancel
             </Button>
-            <Button variant="contained" onClick={handleSubmit}//theme={submitTheme}
-            >
+            <LoadingButton loading={submitting} variant="contained" onClick={handleSubmit}>
               Submit
-            </Button>
+            </LoadingButton>
           </Stack>
         </Stack>
       </form>

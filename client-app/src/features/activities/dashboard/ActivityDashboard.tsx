@@ -1,4 +1,4 @@
-import { Box, Container, Grid, Stack } from "@mui/material";
+import { Box, Container, Grid } from "@mui/material";
 import { Activity } from "../../../app/models/Activity";
 import ActivityList from "./ActivityList";
 import ActivityDetails from "../details/ActivityDetails";
@@ -14,6 +14,7 @@ interface Props {
     closeForm: () => void
     createOrEdit: (activity: Activity) => void;
     deleteActivity: (id: string) => void;
+    submitting: boolean;
 }
 
 export default function ActivityDashboard({ activities,
@@ -24,7 +25,8 @@ export default function ActivityDashboard({ activities,
     openForm,
     closeForm,
     createOrEdit,
-    deleteActivity
+    deleteActivity,
+    submitting
 }: Props) {
     return (
         <Container maxWidth="lg" sx={{ mt: 4 }}>
@@ -52,6 +54,7 @@ export default function ActivityDashboard({ activities,
                                         activity={activity}
                                         selectActivity={selectActivity}
                                         deleteActivity={deleteActivity}
+                                        submitting = {submitting}
                                     />
                                 </Grid>
                             ))}
@@ -70,7 +73,8 @@ export default function ActivityDashboard({ activities,
                         <ActivityForm
                             activity={selectedActivity}
                             closeForm={closeForm}
-                            createOrEdit={createOrEdit} />
+                            createOrEdit={createOrEdit}
+                            submitting = {submitting} />
                     }
                 </Grid>
             </Grid>
