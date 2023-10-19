@@ -3,25 +3,24 @@ import { Activity } from "../../../app/models/Activity";
 import './fad.css'
 import { LoadingButton } from "@mui/lab";
 import { SyntheticEvent, useState } from "react";
+import { useStore } from "../../../app/stores/store";
+import { observer } from "mobx-react-lite";
 
 interface Props {
     activity: Activity;
-    selectActivity: (id: string) => void;
-    deleteActivity: (id: string) => void;
-    submitting: boolean
 }
 
-export default function ActivityList({ activity,
-    selectActivity,
-    deleteActivity,
-    submitting
-}: Props) {
+export default observer(function ActivityList({ activity }: Props) {
+    const { activityStore } = useStore();
+    const {deleteActivity, loading} = activityStore;
+    
     const [target, setTarget] = useState('');
 
     function handleActivityDelete(e: SyntheticEvent<HTMLButtonElement>, id: string) {
         setTarget(e.currentTarget.name);
         deleteActivity(id);
     }
+
 
     return (
         <Paper square elevation={0}>
@@ -68,13 +67,13 @@ export default function ActivityList({ activity,
                         disableElevation
                         color="error"
                         sx={{ borderRadius: "4px" }}
-                        loading={submitting && target === activity.id}
+                        loading={loading && target === activity.id}
                     >
                         Delete
                     </LoadingButton>
                     <Button
                         className="viewListButton"
-                        onClick={() => selectActivity(activity.id)}
+                        onClick={() => activityStore.selectActivity(activity.id)}
                         variant="contained"
                         disableElevation
                         sx={{ borderRadius: "4px" }}
@@ -86,4 +85,4 @@ export default function ActivityList({ activity,
             <Divider variant="middle" />
         </Paper >
     )
-}
+})

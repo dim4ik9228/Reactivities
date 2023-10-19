@@ -1,23 +1,16 @@
-import { Button, Paper, Stack, TextField, createTheme } from "@mui/material";
-import { Activity } from "../../../app/models/Activity";
 import { ChangeEvent, useEffect, useState } from "react";
-import { DateTimeField, LocalizationProvider } from "@mui/x-date-pickers";
 import dayjs, { Dayjs } from "dayjs";
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { useStore } from "../../../app/stores/store";
+import { observer } from "mobx-react-lite";
 import { LoadingButton } from "@mui/lab";
+import { Paper, Stack, TextField, Button } from "@mui/material";
+import { DateTimeField, LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 
-interface Props {
-  activity: Activity | undefined;
-  closeForm: () => void;
-  createOrEdit: (activity: Activity) => void;
-  submitting: boolean
-}
 
-export default function ActivityForm({ activity: selectedActivity,
-  closeForm,
-  createOrEdit,
-  submitting
-}: Props) {
+export default observer(function ActivityForm() {
+  const { activityStore } = useStore();
+  const { selectedActivity, closeForm, createActivity, updateActivity, loading } = activityStore;
   const initialState = selectedActivity ?? {
     id: '',
     title: '',
@@ -37,11 +30,14 @@ export default function ActivityForm({ activity: selectedActivity,
       const initialDate = dayjs(activity.date);
       setSelectedDate(initialDate);
     }
+    else {
+      setSelectedDate(dayjs());
+    }
   }, [activity.date]);
 
   function handleSubmit() {
     activity.date = selectedDate!.toISOString();
-    createOrEdit(activity);
+    activity.id ? updateActivity(activity) : createActivity(activity);
   }
 
   function handleInputChange(event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
@@ -114,7 +110,7 @@ export default function ActivityForm({ activity: selectedActivity,
             <Button variant="contained" onClick={closeForm}>
               Cancel
             </Button>
-            <LoadingButton loading={submitting} variant="contained" onClick={handleSubmit}>
+            <LoadingButton loading={loading} variant="contained" onClick={handleSubmit}>
               Submit
             </LoadingButton>
           </Stack>
@@ -122,4 +118,4 @@ export default function ActivityForm({ activity: selectedActivity,
       </form>
     </Paper>
   )
-}
+})

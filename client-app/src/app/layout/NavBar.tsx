@@ -4,12 +4,12 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
+import { useStore } from '../stores/store';
 
-interface Props {
-    openForm: () => void;
-}
 
-function ResponsiveAppBar({openForm}: Props) {
+function ResponsiveAppBar() {
+    const {activityStore} = useStore();
+
     return (
         <AppBar position="fixed" className="NavBar">
             <Container maxWidth="xl">
@@ -39,7 +39,7 @@ function ResponsiveAppBar({openForm}: Props) {
                         >
                             Activities
                         </Button>
-                        <Button variant="contained" onClick={openForm}
+                        <Button variant="contained" onClick={() => activityStore.openForm()}
                             sx={{ ml: 2, my: 2, color: 'white', display: 'block' }}
                         >
                             Create Activity

@@ -1,13 +1,14 @@
 import { Card, CardMedia, CardContent, Typography, Divider, CardActions, ButtonGroup, Button } from "@mui/material";
-import { Activity } from "../../../app/models/Activity";
+import { useStore } from "../../../app/stores/store";
 
-interface Props {
-    activity: Activity;
-    cancelSelectActivity: () => void;
-    openForm: (id: string) => void
-}
 
-export default function ActivityDetails({ activity, cancelSelectActivity, openForm }: Props) {
+
+export default function ActivityDetails() {
+    const { activityStore } = useStore();
+    const { selectedActivity: activity, openForm, cancelSelectedActivity } = activityStore;
+
+    if (!activity) return; // removing ts errors 
+
     return (
         <Card sx={{ borderRadius: "10px", mb: 4 }}>
             <CardMedia
@@ -32,7 +33,7 @@ export default function ActivityDetails({ activity, cancelSelectActivity, openFo
                     fullWidth
                 >
                     <Button onClick={() => openForm(activity.id)}>Edit</Button>
-                    <Button onClick={cancelSelectActivity}>
+                    <Button onClick={cancelSelectedActivity}>
                         Cancel
                     </Button>
                 </ButtonGroup>

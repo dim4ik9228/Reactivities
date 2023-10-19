@@ -1,33 +1,15 @@
 import { Box, Container, Grid } from "@mui/material";
-import { Activity } from "../../../app/models/Activity";
 import ActivityList from "./ActivityList";
 import ActivityDetails from "../details/ActivityDetails";
 import ActivityForm from "../form/ActivityForm";
+import { useStore } from "../../../app/stores/store";
+import { observer } from "mobx-react-lite";
 
-interface Props {
-    activities: Activity[];
-    selectedActivity: Activity | undefined;
-    selectActivity: (id: string) => void;
-    cancelSelectActivity: () => void;
-    editMode: boolean;
-    openForm: (id: string) => void;
-    closeForm: () => void
-    createOrEdit: (activity: Activity) => void;
-    deleteActivity: (id: string) => void;
-    submitting: boolean;
-}
+export default observer(function ActivityDashboard() {
 
-export default function ActivityDashboard({ activities,
-    selectedActivity,
-    selectActivity,
-    cancelSelectActivity,
-    editMode,
-    openForm,
-    closeForm,
-    createOrEdit,
-    deleteActivity,
-    submitting
-}: Props) {
+    const { activityStore } = useStore();
+    const { selectedActivity, editMode, activitiesByDate } = activityStore;
+
     return (
         <Container maxWidth="lg" sx={{ mt: 4 }}>
             <Grid
@@ -48,13 +30,10 @@ export default function ActivityDashboard({ activities,
                                 borderRadius: "10px",
                             }}
                         >
-                            {activities.map((activity) => (
+                            {activitiesByDate.map((activity) => (
                                 <Grid item xs={12} key={activity.id}>
                                     <ActivityList
                                         activity={activity}
-                                        selectActivity={selectActivity}
-                                        deleteActivity={deleteActivity}
-                                        submitting = {submitting}
                                     />
                                 </Grid>
                             ))}
@@ -63,21 +42,13 @@ export default function ActivityDashboard({ activities,
                 </Grid>
                 <Grid item xs={5} sx={{ maxWidth: "428px" }}>
                     {selectedActivity && !editMode &&
-                        <ActivityDetails
-                            activity={selectedActivity}
-                            cancelSelectActivity={cancelSelectActivity}
-                            openForm={openForm}
-                        />
+                        <ActivityDetails />
                     }
                     {editMode &&
-                        <ActivityForm
-                            activity={selectedActivity}
-                            closeForm={closeForm}
-                            createOrEdit={createOrEdit}
-                            submitting = {submitting} />
+                        <ActivityForm />
                     }
                 </Grid>
             </Grid>
         </Container>
     )
-}
+})
