@@ -1,19 +1,28 @@
 import { Card, CardMedia, CardContent, Typography, Divider, CardActions, ButtonGroup, Button } from "@mui/material";
 import { useStore } from "../../../app/stores/store";
+import { observer } from "mobx-react-lite";
+import { Link, useParams } from "react-router-dom";
+import LoadingComponent from "../../../app/layout/LoadingComponent";
+import { useEffect } from "react";
 
 
 
-export default function ActivityDetails() {
+export default observer(function ActivityDetails() {
     const { activityStore } = useStore();
-    const { selectedActivity: activity, openForm, cancelSelectedActivity } = activityStore;
+    const { selectedActivity: activity, loadActivity, loadingInitial } = activityStore;
+    const { id } = useParams();
 
-    if (!activity) return; // removing ts errors 
+    useEffect(() => {
+        if (id) loadActivity(id);
+    }, [id, loadActivity])
+
+    if (loadingInitial || !activity) return <LoadingComponent /> // removing ts errors 
 
     return (
         <Card sx={{ borderRadius: "10px", mb: 4 }}>
             <CardMedia
-                sx={{ height: 140 }}
-                image={`./assets/categoryImages/${activity.category}.jpg`}
+                sx={{ height: 540 }}
+                image={`/assets/categoryImages/${activity.category}.jpg`}
                 title={activity.title}
             />
             <CardContent>
@@ -32,12 +41,12 @@ export default function ActivityDetails() {
                     size="medium"
                     fullWidth
                 >
-                    <Button onClick={() => openForm(activity.id)}>Edit</Button>
-                    <Button onClick={cancelSelectedActivity}>
+                    <Button component={Link} to={`/manage/${activity.id}`}>Edit</Button>
+                    <Button component={Link} to="/activities">
                         Cancel
                     </Button>
                 </ButtonGroup>
             </CardActions>
         </Card>
     )
-}
+})

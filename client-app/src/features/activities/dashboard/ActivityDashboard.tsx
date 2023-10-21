@@ -1,17 +1,15 @@
-import { Box, Container, Grid } from "@mui/material";
+import { Box, Container, Grid, Typography } from "@mui/material";
 import ActivityList from "./ActivityList";
-import ActivityDetails from "../details/ActivityDetails";
-import ActivityForm from "../form/ActivityForm";
 import { useStore } from "../../../app/stores/store";
 import { observer } from "mobx-react-lite";
 
 export default observer(function ActivityDashboard() {
 
     const { activityStore } = useStore();
-    const { selectedActivity, editMode, activitiesByDate } = activityStore;
+    const { activitiesByDate } = activityStore;
 
     return (
-        <Container maxWidth="lg" sx={{ mt: 4 }}>
+        <Container sx={{ mt: 4 }}>
             <Grid
                 container
                 justifyContent="center"
@@ -40,13 +38,8 @@ export default observer(function ActivityDashboard() {
                         </Box>
                     </Grid>
                 </Grid>
-                <Grid item xs={5} sx={{ maxWidth: "428px" }}>
-                    {selectedActivity && !editMode &&
-                        <ActivityDetails />
-                    }
-                    {editMode &&
-                        <ActivityForm />
-                    }
+                <Grid item xs ={5}>
+                    <Typography variant="h5">Activity filters</Typography>
                 </Grid>
             </Grid>
         </Container>

@@ -5,6 +5,7 @@ import { LoadingButton } from "@mui/lab";
 import { SyntheticEvent, useState } from "react";
 import { useStore } from "../../../app/stores/store";
 import { observer } from "mobx-react-lite";
+import { Link } from "react-router-dom";
 
 interface Props {
     activity: Activity;
@@ -72,8 +73,8 @@ export default observer(function ActivityList({ activity }: Props) {
                         Delete
                     </LoadingButton>
                     <Button
+                        component={Link} to={`/activities/${activity.id}`}
                         className="viewListButton"
-                        onClick={() => activityStore.selectActivity(activity.id)}
                         variant="contained"
                         disableElevation
                         sx={{ borderRadius: "4px" }}
