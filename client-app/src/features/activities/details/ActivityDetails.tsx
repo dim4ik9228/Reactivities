@@ -1,11 +1,13 @@
-import { Card, CardMedia, CardContent, Typography, Divider, CardActions, ButtonGroup, Button } from "@mui/material";
+import { Grid } from "@mui/material";
 import { useStore } from "../../../app/stores/store";
 import { observer } from "mobx-react-lite";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
 import { useEffect } from "react";
-
-
+import ActivityDetailedHeader from "./ActivityDetailedHeader";
+import ActivityDetailedSideBar from "./ActivityDetailedSideBar";
+import ActivityDetailedChat from "./ActivityDetailedChat";
+import ActivityDetailedInfo from "./ActivityDetailedInfo";
 
 export default observer(function ActivityDetails() {
     const { activityStore } = useStore();
@@ -16,37 +18,23 @@ export default observer(function ActivityDetails() {
         if (id) loadActivity(id);
     }, [id, loadActivity])
 
-    if (loadingInitial || !activity) return <LoadingComponent /> // removing ts errors 
+    if (loadingInitial || !activity) return <LoadingComponent />
 
     return (
-        <Card sx={{ borderRadius: "10px", mb: 4 }}>
-            <CardMedia
-                sx={{ height: 540 }}
-                image={`/assets/categoryImages/${activity.category}.jpg`}
-                title={activity.title}
-            />
-            <CardContent>
-                <Typography gutterBottom variant="h5" component="div">
-                    {activity.title}
-                </Typography>
-                <Typography variant="body2">{activity.date}</Typography>
-                <Typography variant="body2">{activity.description}</Typography>
-            </CardContent>
-            <Divider />
-            <CardActions>
-                <ButtonGroup
-                    variant="outlined"
-                    disableElevation
-                    aria-label="outlined button group"
-                    size="medium"
-                    fullWidth
-                >
-                    <Button component={Link} to={`/manage/${activity.id}`}>Edit</Button>
-                    <Button component={Link} to="/activities">
-                        Cancel
-                    </Button>
-                </ButtonGroup>
-            </CardActions>
-        </Card>
+        <Grid
+            container
+            justifyContent="center"
+            direction="row"
+            spacing={4}
+        >
+            <Grid item xs={8}>
+                <ActivityDetailedHeader activity={activity} />
+                <ActivityDetailedInfo activity={activity} />
+                <ActivityDetailedChat />
+            </Grid>
+            <Grid item xs={4}>
+                <ActivityDetailedSideBar />
+            </Grid>
+        </Grid>
     )
 })

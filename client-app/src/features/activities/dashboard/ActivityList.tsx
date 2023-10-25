@@ -6,6 +6,9 @@ import { SyntheticEvent, useState } from "react";
 import { useStore } from "../../../app/stores/store";
 import { observer } from "mobx-react-lite";
 import { Link } from "react-router-dom";
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import dayjs from "dayjs";
 
 interface Props {
     activity: Activity;
@@ -13,8 +16,8 @@ interface Props {
 
 export default observer(function ActivityList({ activity }: Props) {
     const { activityStore } = useStore();
-    const {deleteActivity, loading} = activityStore;
-    
+    const { deleteActivity, loading } = activityStore;
+
     const [target, setTarget] = useState('');
 
     function handleActivityDelete(e: SyntheticEvent<HTMLButtonElement>, id: string) {
@@ -29,38 +32,66 @@ export default observer(function ActivityList({ activity }: Props) {
                 sx={{
                     display: "flex",
                     flexDirection: "row",
-                    justifyContent: "space-between",
                     alignItems: "center",
-                    p: 2
+                    pt: 2, px: 2
                 }}>
-                <Box sx={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-                    <Typography className="ActivityTag" variant="body1">
-                        {activity.title}
-                    </Typography>
-                    <Typography className="ActivityTag" variant="body1">
-                        {activity.date}
-                    </Typography>
-                    <Typography className="ActivityTag" variant="body1">
-                        {activity.description}
-                    </Typography>
-                    <Typography className="ActivityTag" variant="body1">
-                        {activity.city}
-                    </Typography>
-                    <Typography
-                        variant="button"
-                        sx={{
-                            border: "1px solid grey",
-                            borderRadius: "6px",
-                            m: "2px",
-                            p: "4px",
-                            alignSelf: "start",
-                        }}
-                    >
-                        {activity.category}
-                    </Typography>
+                <Box sx={{
+                    width: "100%"
+                }}>
+                    <Box sx={{ display: "flex", width: "100%" }}>
+                        <span className="user-image">
+                            <img src="/assets/user.png" alt="Host Image" />
+                        </span>
+                        <div>
+                            <Typography className="ActivityTag" variant="h6">
+                                {activity.title}
+                            </Typography>
+                            <Typography className="ActivityTag" variant="subtitle1">
+                                Hosted by Bob
+                            </Typography>
+                        </div>
+                    </Box>
+                    <Divider variant="middle" sx={{ my: "7px" }} />
+                    <Box display="flex">
+                        <AccessTimeIcon color="action" />
+                        <Typography className="ActivityTag" variant="body1"
+                            sx={{ ml: "4px" }}
+                        >
+                            {dayjs(activity.date).format('dddd, DD/MM/YYYY HH:mm').toString()}
+                        </Typography>
+                    </Box>
+                    <Box display="flex">
+                        <LocationOnIcon color="action" />
+                        <Typography className="ActivityTag" variant="body1"
+                            sx={{ ml: "4px" }}
+                        >
+                            {activity.city}, {activity.venue}
+                        </Typography>
+                    </Box>
+                    <Divider variant="middle" sx={{ my: "7px" }} />
+                    <Box sx={{ backgroundColor: "#eaeaea", p: 1 }}>
+                        <Typography className="ActivityTag" variant="body2">
+                            Attendees go here
+                        </Typography>
+                    </Box>
+                    <Divider variant="middle" sx={{ my: "7px" }} />
+                    <Box >
+                        <Typography className="ActivityTag" variant="body2" sx={{mt: "10px"}}>
+                            {activity.description}
+                        </Typography>
+                    </Box>
+
                 </Box>
+            </Box>
+
+            <Box sx={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "flex-end",
+                px: 2, pb: 2
+            }}>
                 <Box sx={{ alignSelf: "end", display: "flex", gap: 1 }}>
-                    <LoadingButton
+                    {/*                   <LoadingButton
                         name={activity.id}
                         className="viewListButton"
                         onClick={(e) => handleActivityDelete(e, activity.id)}
@@ -71,7 +102,7 @@ export default observer(function ActivityList({ activity }: Props) {
                         loading={loading && target === activity.id}
                     >
                         Delete
-                    </LoadingButton>
+                        </LoadingButton>*/}
                     <Button
                         component={Link} to={`/activities/${activity.id}`}
                         className="viewListButton"
@@ -83,7 +114,6 @@ export default observer(function ActivityList({ activity }: Props) {
                     </Button>
                 </Box>
             </Box>
-            <Divider variant="middle" />
         </Paper >
     )
 })

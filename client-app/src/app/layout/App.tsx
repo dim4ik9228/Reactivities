@@ -4,9 +4,11 @@ import NavBar from './NavBar';
 import LoadingComponent from './LoadingComponent';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '../stores/store';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
+import HomePage from '../../features/home/HomePage';
 
 function App() {
+  const location = useLocation();
   const { activityStore } = useStore();
 
   useEffect(() => {
@@ -15,12 +17,18 @@ function App() {
 
   if (activityStore.loadingInitial) return <LoadingComponent />
 
+
+
   return (
     <>
-      <NavBar />
-      <Container sx={{ mt: 10 }}>
-        <Outlet />
-      </Container>
+      {location.pathname === '/' ? <HomePage /> : (
+        <>
+          <NavBar />
+          <Container sx={{ mt: 10 }}>
+            <Outlet />
+          </Container>
+        </>
+      )}
     </>
   )
 }
