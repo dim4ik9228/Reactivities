@@ -38,11 +38,17 @@ function ResponsiveAppBar() {
                         >
                             Activities
                         </Button>
+                        <Button component={NavLink} to="/errors"
+                            sx={{ ml: 2, my: 2, color: 'white', display: 'block' }}
+                        >
+                            Errors
+                        </Button>
                         <Button variant="contained" component={NavLink} to="/createActivity"
                             sx={{ ml: 2, my: 2, color: 'white', display: 'block' }}
                         >
                             Create Activity
                         </Button>
+
 
                     </Box>
                 </Toolbar>
