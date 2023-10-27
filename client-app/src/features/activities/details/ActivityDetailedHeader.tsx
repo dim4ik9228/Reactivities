@@ -2,6 +2,7 @@ import dayjs from 'dayjs';
 import { Activity } from '../../../app/models/Activity';
 import { Card, CardContent, Typography, Button, Box } from '@mui/material';
 import { observer } from 'mobx-react-lite';
+import { Link } from 'react-router-dom';
 
 
 interface Props {
@@ -45,7 +46,7 @@ export default observer(function ActivityDetailedHeader({ activity }: Props) {
                 <Button variant="contained" color="inherit" sx={{ ml: 1 }}>
                     Cancel attendance
                 </Button>
-                <Button variant="contained" color="warning" style={{ float: 'right' }}>
+                <Button component={Link} to={`/manage/${activity.id}`} variant="contained" color="warning" sx={{ float: 'right' }}>
                     Manage Event
                 </Button>
             </CardContent>

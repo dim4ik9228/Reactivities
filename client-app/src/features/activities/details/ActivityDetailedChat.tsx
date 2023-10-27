@@ -21,10 +21,10 @@ export default observer(function ActivityDetailedChat() {
                                 <Box>
                                     <Box sx={{ display: "flex", gap: 1 }}>
                                         <Typography variant="subtitle1">Matt</Typography>
-                                        <Typography variant="subtitle2" sx={{ mt: "3px", color: "grey" }}>Today at 5:42 PM</Typography>
+                                        <Typography variant="subtitle2" sx={{ mt: "3px" }}>Today at 5:42 PM</Typography>
                                     </Box>
                                     <Typography variant="body1">How artistic!</Typography>
-                                    <Typography variant="body2" component="a" sx={{ color: "grey" }}>Reply</Typography>
+                                    <Typography variant="body2" component="a">Reply</Typography>
                                 </Box>
                             </ListItem>
                             <ListItem>
@@ -34,10 +34,10 @@ export default observer(function ActivityDetailedChat() {
                                 <Box>
                                     <Box sx={{ display: "flex", gap: 1 }}>
                                         <Typography variant="subtitle1">Joe Henderson</Typography>
-                                        <Typography variant="subtitle2" sx={{ mt: "3px", color: "grey" }}>5 days ago</Typography>
+                                        <Typography variant="subtitle2">5 days ago</Typography>
                                     </Box>
                                     <Typography variant="body1">Dude this is awesome!</Typography>
-                                    <Typography variant="body2" component="a" sx={{ color: "grey" }}>Reply</Typography>
+                                    <Typography variant="body2" component="a">Reply</Typography>
                                 </Box>
                             </ListItem>
                         </List>

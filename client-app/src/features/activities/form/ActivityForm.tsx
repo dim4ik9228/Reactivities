@@ -1,15 +1,18 @@
-import { ChangeEvent, useEffect, useState } from "react";
-import dayjs, { Dayjs } from "dayjs";
+import { useEffect, useState } from "react";
 import { useStore } from "../../../app/stores/store";
 import { observer } from "mobx-react-lite";
 import { LoadingButton } from "@mui/lab";
-import { Paper, Stack, TextField, Button } from "@mui/material";
-import { DateTimeField, LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import { Paper, Stack, Button, Typography } from "@mui/material";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { Activity } from "../../../app/models/Activity";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
-import { v4 as uuid } from "uuid";
+import { Form, Formik } from "formik";
+import * as Yup from 'yup';
+import TextInput from "../../../app/common/form/TextInput";
+import { categoryOptions } from "../../../app/common/options/categoryOptions";
+import SelectInput from "../../../app/common/form/SelectInput";
+import DateInput from "../../../app/common/form/DateInput";
+import { v4 as uuid } from 'uuid'
 
 export default observer(function ActivityForm() {
   const { activityStore } = useStore();
@@ -29,24 +32,21 @@ export default observer(function ActivityForm() {
     venue: ''
   });
 
+  const validationSchema = Yup.object({
+    title: Yup.string().required('The activity title is required'),
+    description: Yup.string().required('The activity description is required'),
+    category: Yup.string().required('The activity category is required'),
+    date: Yup.string().required('The activity date is required'),
+    venue: Yup.string().required('The activity venue is required'),
+    city: Yup.string().required('The activity city is required'),
+  })
+
   useEffect(() => {
     if (id) loadActivity(id).then(activity => setActivity(activity!));
   }, [id, loadActivity])
 
-  const [selectedDate, setSelectedDate] = useState<Dayjs | null>(null);
 
-  useEffect(() => {
-    if (activity.date) {
-      const initialDate = dayjs(activity.date);
-      setSelectedDate(initialDate);
-    }
-    else {
-      setSelectedDate(dayjs());
-    }
-  }, [activity.date]);
-
-  function handleSubmit() {
-    activity.date = selectedDate!.toISOString();
+  function handleFormSubmit(activity: Activity) {
     if (!activity.id) {
       activity.id = uuid();
       createActivity(activity).then(() => navigate(`/activities/${activity.id}`))
@@ -56,84 +56,42 @@ export default observer(function ActivityForm() {
     }
   }
 
-  function handleInputChange(event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
-    const { name, value } = event.target;
-    setActivity({ ...activity, [name]: value });
-  }
-
-  function handleDateChange(date: Dayjs | null) {
-    setSelectedDate(date);
-  }
-
   if (loadingInitial) return <LoadingComponent />
 
   return (
     <Paper sx={{ p: "12px", borderRadius: "10px" }}>
-      <form autoComplete="off" >
-        <Stack spacing={1}>
-          <TextField
-            value={activity.title}
-            name="title"
-            label="Title"
-            variant="outlined"
-            size="small"
-            onChange={handleInputChange}
-          />
-          <TextField
-            label="Description"
-            value={activity.description}
-            name="description"
-            multiline
-            variant="outlined"
-            size="medium"
-            onChange={handleInputChange}
-          />
-          <TextField
-            value={activity.category}
-            name="category"
-            label="Category"
-            multiline
-            variant="outlined"
-            size="small"
-            onChange={handleInputChange}
-          />
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DateTimeField
-              name="date"
-              label="Date"
-              value={selectedDate}
-              onChange={handleDateChange}
-            />
-          </LocalizationProvider>
-          <TextField
-            value={activity.city}
-            name="city"
-            label="City"
-            multiline
-            variant="outlined"
-            size="small"
-            onChange={handleInputChange}
-          />
-          <TextField
-            value={activity.venue}
-            name="venue"
-            label="Venue"
-            multiline
-            variant="outlined"
-            size="small"
-            onChange={handleInputChange}
-          />
+      <Formik
+        validationSchema={validationSchema}
+        enableReinitialize
+        initialValues={activity}
+        onSubmit={values => handleFormSubmit(values)}
+      >
+        {({ handleSubmit, isValid, isSubmitting, dirty }) => (
+          <Form onSubmit={handleSubmit} autoComplete="off" >
+            <Stack spacing={1}>
+              <Typography variant="h6">Activity Details</Typography>
+              <TextInput name="title" placeholder="Title" />
+              <TextInput ml name="description" placeholder="Description" />
+              <SelectInput options={categoryOptions} name="category" placeholder="Category" />
+              <DateInput name="date" placeholder="Date" />
+              <Typography variant="h6">Location Details</Typography>
+              <TextInput name="city" placeholder="City" />
+              <TextInput name="venue" placeholder="Venue" />
 
-          <Stack direction="row" spacing={1} justifyContent="flex-end">
-            <Button variant="contained" component={Link} to={`/activities/${activity.id}`}>
-              Cancel
-            </Button>
-            <LoadingButton loading={loading} variant="contained" onClick={handleSubmit}>
-              Submit
-            </LoadingButton>
-          </Stack>
-        </Stack>
-      </form>
+              <Stack direction="row" spacing={1} justifyContent="flex-end">
+                <Button variant="contained" component={Link} to={`/activities/${activity.id}`}>
+                  Cancel
+                </Button>
+                <LoadingButton
+                  disabled={isSubmitting || !dirty || !isValid}
+                  loading={loading} variant="contained" type="submit">
+                  Submit
+                </LoadingButton>
+              </Stack>
+            </Stack>
+          </Form>
+        )}
+      </Formik>
     </Paper>
   )
 })

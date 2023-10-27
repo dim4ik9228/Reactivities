@@ -76,7 +76,7 @@ export default observer(function ActivityList({ activity }: Props) {
                     </Box>
                     <Divider variant="middle" sx={{ my: "7px" }} />
                     <Box >
-                        <Typography className="ActivityTag" variant="body2" sx={{mt: "10px"}}>
+                        <Typography className="ActivityTag" variant="body2" sx={{ mt: "10px" }}>
                             {activity.description}
                         </Typography>
                     </Box>
@@ -91,7 +91,7 @@ export default observer(function ActivityList({ activity }: Props) {
                 px: 2, pb: 2
             }}>
                 <Box sx={{ alignSelf: "end", display: "flex", gap: 1 }}>
-                    {/*                   <LoadingButton
+                    <LoadingButton
                         name={activity.id}
                         className="viewListButton"
                         onClick={(e) => handleActivityDelete(e, activity.id)}
@@ -102,7 +102,7 @@ export default observer(function ActivityList({ activity }: Props) {
                         loading={loading && target === activity.id}
                     >
                         Delete
-                        </LoadingButton>*/}
+                    </LoadingButton>
                     <Button
                         component={Link} to={`/activities/${activity.id}`}
                         className="viewListButton"
