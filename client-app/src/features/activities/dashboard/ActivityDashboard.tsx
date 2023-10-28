@@ -25,7 +25,8 @@ export default observer(function ActivityDashboard() {
                         <Fragment key={group}>
                             <Grid container direction="column" justifyContent="flex-end">
                                 <Typography variant="subtitle1"
-                                    sx = {{
+                                    sx={{
+                                        
                                         color: "teal"
                                     }}
                                 >
@@ -34,10 +35,7 @@ export default observer(function ActivityDashboard() {
                                 <Box
                                     justifyContent="flex-end"
                                     sx={{
-                                        backgroundColor: "white",
-                                        padding: "8px",
                                         mb: "20px",
-                                        borderRadius: "10px",
                                     }}
                                 >
                                     {activities.map((activity) => (

@@ -4,11 +4,25 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
-import { NavLink } from 'react-router-dom';
-import { MenuItem } from '@mui/material';
+import { Link, NavLink } from 'react-router-dom';
+import { Avatar, IconButton, Menu, MenuItem, Tooltip } from '@mui/material';
+import { useStore } from '../stores/store';
+import { useState } from 'react';
+import { observer } from 'mobx-react-lite';
 
 
-function ResponsiveAppBar() {
+export default observer(function NavBar() {
+    const { userStore: { user, logout } } = useStore();
+
+    const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+
+    const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
+        setAnchorElUser(event.currentTarget);
+    };
+    const handleCloseUserMenu = () => {
+        setAnchorElUser(null);
+    };
+
     return (
         <AppBar position="fixed" className="NavBar">
             <Container maxWidth="xl">
@@ -48,12 +62,52 @@ function ResponsiveAppBar() {
                         >
                             Create Activity
                         </Button>
+                    </Box>
 
+                    <Box sx={{ flexGrow: 0 }}>
+                        <Tooltip title="Open settings">
+                            <Box
+                                onClick={handleOpenUserMenu}
+                                sx={{
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    alignItems: "center",
+                                    gap: "10px",
+                                    cursor: "pointer"
+                                }}>
+                                <IconButton sx={{ p: 0 }}>
+                                    <Avatar alt="Remy Sharp" src={user?.image} />
+                                </IconButton>
+                                <Typography>{user?.displayName}</Typography>
+                            </Box>
+                        </Tooltip>
+                        <Menu
+                            sx={{ mt: '45px' }}
+                            id="menu-appbar"
+                            anchorEl={anchorElUser}
+                            anchorOrigin={{
+                                vertical: 'top',
+                                horizontal: 'right',
+                            }}
+                            keepMounted
+                            transformOrigin={{
+                                vertical: 'top',
+                                horizontal: 'right',
+                            }}
+                            open={Boolean(anchorElUser)}
+                            onClose={handleCloseUserMenu}
+                        >
+                            <MenuItem component={Link} to={`/profile/${user?.username}`} onClick={handleCloseUserMenu}>
+                                <Typography textAlign="center">My Account</Typography>
+                            </MenuItem>
+                            <MenuItem onClick={logout}>
+                                <Typography textAlign="center">Logout</Typography>
 
+                            </MenuItem>
+                        </Menu>
                     </Box>
                 </Toolbar>
             </Container>
         </AppBar>
     );
-}
-export default ResponsiveAppBar;
+})

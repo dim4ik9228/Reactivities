@@ -27,13 +27,13 @@ export default observer(function ActivityList({ activity }: Props) {
 
 
     return (
-        <Paper square elevation={0}>
+        <Paper>
             <Box
                 sx={{
                     display: "flex",
                     flexDirection: "row",
                     alignItems: "center",
-                    pt: 2, px: 2
+                    pt: 2, px: 2,
                 }}>
                 <Box sx={{
                     width: "100%"
@@ -68,13 +68,11 @@ export default observer(function ActivityList({ activity }: Props) {
                             {activity.city}, {activity.venue}
                         </Typography>
                     </Box>
-                    <Divider variant="middle" sx={{ my: "7px" }} />
-                    <Box sx={{ backgroundColor: "#eaeaea", p: 1 }}>
+                    <Box sx={{ backgroundColor: "#eaeaea", p: "10px", my: 2 }}>
                         <Typography className="ActivityTag" variant="body2">
                             Attendees go here
                         </Typography>
                     </Box>
-                    <Divider variant="middle" sx={{ my: "7px" }} />
                     <Box >
                         <Typography className="ActivityTag" variant="body2" sx={{ mt: "10px" }}>
                             {activity.description}

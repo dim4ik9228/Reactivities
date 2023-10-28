@@ -16,7 +16,7 @@ namespace API.Extensions
         {
             // Add services to the container.
 
-            services.AddControllers(opt => 
+            services.AddControllers(opt =>
             {
                 var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
                 opt.Filters.Add(new AuthorizeFilter(policy));

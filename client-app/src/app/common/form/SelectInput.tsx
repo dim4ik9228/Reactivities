@@ -27,6 +27,7 @@ export default function TextInput(props: Props) {
                 renderInput={(params) => (
                     <TextField
                         {...params}
+                        placeholder={props.placeholder}
                         sx={{ width: "100%" }}
                         label={props.label}
                         error={meta.touched && !!meta.error}

@@ -2,10 +2,11 @@ import { TextField, Typography } from "@mui/material";
 import { useField } from "formik";
 
 interface Props {
-    placeholder: string;
+    placeholder?: string;
     name: string;
     label?: string;
     ml?: boolean;
+    type?: string;
 }
 
 export default function TextInput(props: Props) {
@@ -15,6 +16,8 @@ export default function TextInput(props: Props) {
     return (
         <>
             <TextField
+                margin="normal"
+                fullWidth
                 multiline={ml}
                 error={meta.touched && !!meta.error}
                 label={props.label} 
