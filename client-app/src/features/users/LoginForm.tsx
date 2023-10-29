@@ -9,6 +9,9 @@ import { LoadingButton } from "@mui/lab";
 export default observer(function LoginForm() {
     const { userStore } = useStore();
 
+    const handleRememberMeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        userStore.setRememberMe(event.target.checked);
+    };
 
     return (
         <Container component="main" maxWidth="xs">
@@ -47,7 +50,7 @@ export default observer(function LoginForm() {
                                     }
                                 />
                                 <FormControlLabel
-                                    control={<Checkbox value="remember" color="primary" />}
+                                    control={<Checkbox value="remember" color="primary" onChange={handleRememberMeChange} />}
                                     label="Remember me"
                                 />
                                 <LoadingButton

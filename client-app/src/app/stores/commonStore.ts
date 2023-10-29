@@ -5,6 +5,7 @@ export default class CommonStore {
     error: ServerError | null = null;
     token: string | null | undefined = localStorage.getItem('jwt');
     appLoaded = false;
+    rememberMe = false;
 
     constructor() {
         makeAutoObservable(this);
@@ -13,9 +14,12 @@ export default class CommonStore {
             () => this.token,
             token => {
                 if (token) {
-                    localStorage.setItem('jwt', token)
+                    if (this.rememberMe)
+                        localStorage.setItem('jwt', token);
+                    else 
+                        sessionStorage.setItem('jwt', token);
                 } else {
-                    localStorage.removeItem('jwt')
+                    localStorage.removeItem('jwt');
                 }
             }
         )
@@ -25,8 +29,9 @@ export default class CommonStore {
         this.error = error;
     }
 
-    setToken = (token: string | null) => {
+    setToken = (token: string | null, rememberMe?: boolean) => {
         this.token = token;
+        this.rememberMe = rememberMe!;
     }
 
     setAppLoaded = () => {

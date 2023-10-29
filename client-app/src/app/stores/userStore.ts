@@ -6,6 +6,7 @@ import { router } from "../router/Routes";
 
 export default class UserStore {
     user: User | null = null;
+    rememberMe = false;
 
     constructor() {
         makeAutoObservable(this);
@@ -38,8 +39,12 @@ export default class UserStore {
         })
     }
 
+    setRememberMe = (value: boolean) => {
+        this.rememberMe = value;
+    }   
+
     private logUser = (user: User) => {
-        store.commonStore.setToken(user.token);
+        store.commonStore.setToken(user.token, this.rememberMe);
         runInAction(() => this.user = user);
         router.navigate('/activities');
     }
