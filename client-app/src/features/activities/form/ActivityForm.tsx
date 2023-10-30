@@ -4,7 +4,7 @@ import { observer } from "mobx-react-lite";
 import { LoadingButton } from "@mui/lab";
 import { Paper, Stack, Button, Typography } from "@mui/material";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { Activity } from "../../../app/models/Activity";
+import { ActivityFormValues } from "../../../app/models/Activity";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
 import { Form, Formik } from "formik";
 import * as Yup from 'yup';
@@ -17,20 +17,12 @@ import { v4 as uuid } from 'uuid'
 export default observer(function ActivityForm() {
   const { activityStore } = useStore();
   const { createActivity, updateActivity,
-    loading, loadActivity, loadingInitial } = activityStore;
+    loadActivity, loadingInitial } = activityStore;
 
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const [activity, setActivity] = useState<Activity>({
-    id: '',
-    title: '',
-    category: '',
-    description: '',
-    date: '',
-    city: '',
-    venue: ''
-  });
+  const [activity, setActivity] = useState<ActivityFormValues>(new ActivityFormValues())
 
   const validationSchema = Yup.object({
     title: Yup.string().required('The activity title is required'),
@@ -42,11 +34,11 @@ export default observer(function ActivityForm() {
   })
 
   useEffect(() => {
-    if (id) loadActivity(id).then(activity => setActivity(activity!));
+    if (id) loadActivity(id).then(activity => setActivity(new ActivityFormValues(activity)));
   }, [id, loadActivity])
 
 
-  function handleFormSubmit(activity: Activity) {
+  function handleFormSubmit(activity: ActivityFormValues) {
     if (!activity.id) {
       activity.id = uuid();
       createActivity(activity).then(() => navigate(`/activities/${activity.id}`))
@@ -84,7 +76,7 @@ export default observer(function ActivityForm() {
                 </Button>
                 <LoadingButton
                   disabled={isSubmitting || !dirty || !isValid}
-                  loading={loading} variant="contained" type="submit">
+                  loading={isSubmitting} variant="contained" type="submit">
                   Submit
                 </LoadingButton>
               </Stack>

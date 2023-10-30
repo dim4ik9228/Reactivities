@@ -1,4 +1,4 @@
-import { Divider, Paper, Typography, Button, Box } from "@mui/material";
+import { Divider, Paper, Typography, Button, Box, Chip } from "@mui/material";
 import { Activity } from "../../../app/models/Activity";
 import './fad.css'
 import { LoadingButton } from "@mui/lab";
@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import dayjs from "dayjs";
+import ActivityListItemAttendee from "./ActivityListItemAttendee";
 
 interface Props {
     activity: Activity;
@@ -28,17 +29,20 @@ export default observer(function ActivityList({ activity }: Props) {
 
     return (
         <Paper>
+            {activity.isCanceled &&
+                <Chip color="error" label="Canceled" sx={{mt: 1, ml: 2}}/>
+            }
             <Box
                 sx={{
                     display: "flex",
-                    flexDirection: "row",
                     alignItems: "center",
+                    flexDirection: "column",
                     pt: 2, px: 2,
                 }}>
                 <Box sx={{
                     width: "100%"
                 }}>
-                    <Box sx={{ display: "flex", width: "100%" }}>
+                    <Box sx={{ display: "flex", width: "100%", mb: 2 }}>
                         <span className="user-image">
                             <img src="/assets/user.png" alt="Host Image" />
                         </span>
@@ -47,8 +51,22 @@ export default observer(function ActivityList({ activity }: Props) {
                                 {activity.title}
                             </Typography>
                             <Typography className="ActivityTag" variant="subtitle1">
-                                Hosted by Bob
+                                Hosted by {activity.host?.displayName}
                             </Typography>
+                            {activity.isHost &&
+                                <Box sx={{ border: "1px solid orange", p: 0.5 }}>
+                                    <Typography color="orange" className="ActivityTag" variant="body2">
+                                        You are hosting this activity
+                                    </Typography>
+                                </Box>
+                            }
+                            {activity.isGoing && !activity.isHost &&
+                                <Box sx={{ border: "1px solid green", p: 0.5 }}>
+                                    <Typography color="green" className="ActivityTag" variant="body2">
+                                        You are going to this activity
+                                    </Typography>
+                                </Box>
+                            }
                         </div>
                     </Box>
                     <Divider variant="middle" sx={{ my: "7px" }} />
@@ -69,9 +87,7 @@ export default observer(function ActivityList({ activity }: Props) {
                         </Typography>
                     </Box>
                     <Box sx={{ backgroundColor: "#eaeaea", p: "10px", my: 2 }}>
-                        <Typography className="ActivityTag" variant="body2">
-                            Attendees go here
-                        </Typography>
+                        <ActivityListItemAttendee attendees={activity.attendees!} />
                     </Box>
                     <Box >
                         <Typography className="ActivityTag" variant="body2" sx={{ mt: "10px" }}>

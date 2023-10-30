@@ -33,7 +33,7 @@ export default observer(function ActivityDetails() {
                 <ActivityDetailedChat />
             </Grid>
             <Grid item xs={4}>
-                <ActivityDetailedSideBar />
+                <ActivityDetailedSideBar activity={activity!}/>
             </Grid>
         </Grid>
     )

@@ -1,62 +1,47 @@
-import { Card, CardContent, Typography, List, ListItem, ListItemAvatar, Avatar, ListItemText } from '@mui/material';
+import { Card, CardContent, Typography, List, ListItem, ListItemAvatar, Avatar, ListItemText, Divider, Box } from '@mui/material';
 import { Link } from 'react-router-dom';
+import { Activity } from '../../../app/models/Activity';
+import { observer } from 'mobx-react-lite';
+import { Fragment } from 'react';
 
-export default function ActivityDetailedSidebar() {
+interface Props {
+    activity: Activity;
+}
+
+export default observer(function ActivityDetailedSidebar({ activity: { attendees, host } }: Props) {
+    if (!attendees) return;
     return (
         <Card>
-            <CardContent>
-                <Typography variant="h6" align="center">
-                    3 People Going
-                </Typography>
+            <CardContent sx={{ p: 0, display: "flex", flexDirection: "column" }}>
+                <Box sx={{ backgroundColor: "#1976D2", p: 1 }}>
+                    <Typography variant="h6" align="center" color="white" >
+                        {attendees.length} {attendees.length === 1 ? 'Person' : 'People'} Going
+                    </Typography>
+                </Box>
                 <List>
-                    <ListItem>
-                        <ListItemAvatar>
-                            <Avatar src="/assets/user.png" />
-                        </ListItemAvatar>
-                        <ListItemText
-                            primary={
-                                <Typography sx={{ textDecoration: "none" }} variant="h6" component={Link} to="#">
-                                    Bob
-                                </Typography>
-                            }
-                            secondary={
-                                <Typography variant="subtitle2">
-                                    <span style={{ color: 'orange' }}>Host</span>
-                                </Typography>
-                            }
-                        />
-                    </ListItem>
-                    <ListItem>
-                        <ListItemAvatar>
-                            <Avatar src="/assets/user.png" />
-                        </ListItemAvatar>
-                        <ListItemText
-                            primary={
-                                <Typography sx={{ textDecoration: "none" }} variant="h6" component={Link} to="#">
-                                    Tom
-                                </Typography>
-                            }
-                            secondary={
-                                <Typography variant="subtitle2">
-                                    <span style={{ color: 'orange' }}>Following</span>
-                                </Typography>
-                            }
-                        />
-                    </ListItem>
-                    <ListItem>
-                        <ListItemAvatar>
-                            <Avatar src="/assets/user.png" />
-                        </ListItemAvatar>
-                        <ListItemText
-                            primary={
-                                <Typography sx={{ textDecoration: "none" }} variant="h6" component={Link} to="#">
-                                    Sally
-                                </Typography>
-                            }
-                        />
-                    </ListItem>
+                    {attendees.map(attendee => (
+                        <ListItem key={attendee.username}>
+                            <ListItemAvatar>
+                                <Avatar sx={{ height: "55px", width: "55px" }} variant="square" src={attendee?.image} />
+                            </ListItemAvatar>
+                            <ListItemText sx={{ ml: 1 }}
+                                primary={
+                                    <Typography sx={{ textDecoration: "none" }} variant="body1" component={Link} to={`/profiles/${attendee.image}`}>
+                                        {attendee.displayName}
+                                    </Typography>
+                                }
+                                secondary={
+                                    <Fragment>
+                                        {attendee.username === host?.username &&
+                                            <Typography variant="body2" color="orange">Host</Typography>
+                                        }
+                                    </Fragment>
+                                }
+                            />
+                        </ListItem>
+                    ))}
                 </List>
             </CardContent>
         </Card>
     );
-}
+})
