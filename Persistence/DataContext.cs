@@ -12,6 +12,7 @@ namespace Persistence
 
         public DbSet<Activity> Activities { get; set; }
         public DbSet<ActivityAttendee> Attendees { get; set; }
+        public DbSet<Photo> Photos { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -30,4 +31,4 @@ namespace Persistence
                 .HasForeignKey(aa => aa.ActivityId);
         }
     }
-    }
+}
