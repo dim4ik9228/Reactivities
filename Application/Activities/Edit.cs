@@ -1,7 +1,10 @@
 using Application.Core;
+using Application.Interfaces;
 using AutoMapper;
 using Domain;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Persistence;
 
 namespace Application.Activities
@@ -17,22 +20,24 @@ namespace Application.Activities
         {
             private readonly DataContext context;
             private readonly IMapper mapper;
+            private readonly IUserAccessor userAccessor;
 
-            public Handler(DataContext context, IMapper mapper)
+            public Handler(DataContext context, IUserAccessor userAccessor, IMapper mapper)
             {
+                this.userAccessor = userAccessor;
                 this.context = context;
                 this.mapper = mapper;
             }
 
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var activity = await context.Activities.FindAsync(request.Activity.Id);
 
-                if (activity is null) 
+                var activity = await context.Activities.FirstOrDefaultAsync(x => x.Id == request.Activity.Id);
+
+                if (activity is null)
                     return null;
-                
+
                 mapper.Map(request.Activity, activity);
-                
 
                 var result = await context.SaveChangesAsync() > 0;
                 if (result)

@@ -30,7 +30,7 @@ export default observer(function ActivityList({ activity }: Props) {
     return (
         <Paper>
             {activity.isCanceled &&
-                <Chip color="error" label="Canceled" sx={{mt: 1, ml: 2}}/>
+                <Chip color="error" label="Canceled" sx={{ mt: 1, ml: 2 }} />
             }
             <Box
                 sx={{
@@ -44,14 +44,14 @@ export default observer(function ActivityList({ activity }: Props) {
                 }}>
                     <Box sx={{ display: "flex", width: "100%", mb: 2 }}>
                         <span className="user-image">
-                            <img src="/assets/user.png" alt="Host Image" />
+                            <img src={activity.host?.image || "/assets/user.png"} alt="Host Image" />
                         </span>
                         <div>
                             <Typography className="ActivityTag" variant="h6">
                                 {activity.title}
                             </Typography>
                             <Typography className="ActivityTag" variant="subtitle1">
-                                Hosted by {activity.host?.displayName}
+                                Hosted by <Link to={`/profiles/${activity.host?.username}`}>{activity.host?.displayName}</Link>
                             </Typography>
                             {activity.isHost &&
                                 <Box sx={{ border: "1px solid orange", p: 0.5 }}>

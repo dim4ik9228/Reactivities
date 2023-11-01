@@ -3,6 +3,7 @@ import { Activity, ActivityFormValues } from "../models/Activity";
 import agent from "../api/Agent";
 import { store } from "./store";
 import { Profile } from "../models/Profile";
+import UserStore from "./userStore";
 
 export default class ActivityStore {
     activityRegistry = new Map<string, Activity>();
@@ -108,6 +109,7 @@ export default class ActivityStore {
             runInAction(() => {
                 if (activity.id) {
                     const updatedActivity = { ...this.getActivity(activity.id), ...activity }
+                    updatedActivity.host = this.getActivity(activity.id)?.host;
                     this.activityRegistry.set(activity.id, updatedActivity as Activity);
                     this.selectedActivity = updatedActivity as Activity;
                 }
@@ -180,6 +182,6 @@ export default class ActivityStore {
                 this.loading = false;
             })
         }
-    } 
+    }
 
 }

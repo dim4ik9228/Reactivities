@@ -25,7 +25,7 @@ export default observer(function NavBar() {
 
     return (
         <AppBar position="fixed" className="NavBar">
-            <Container maxWidth="xl">
+            <Container maxWidth="lg">
                 <Toolbar disableGutters>
                     <MenuItem component={NavLink} to="/">
                         <img src="/assets/logo.png" alt="logo" style={{ height: '3em' }} />
@@ -97,7 +97,7 @@ export default observer(function NavBar() {
                             open={Boolean(anchorElUser)}
                             onClose={handleCloseUserMenu}
                         >
-                            <MenuItem component={Link} to={`/profile/${user?.username}`} onClick={handleCloseUserMenu}>
+                            <MenuItem component={Link} to={`/profiles/${user?.username}`} onClick={handleCloseUserMenu}>
                                 <Typography textAlign="center">My Account</Typography>
                             </MenuItem>
                             <MenuItem onClick={logout}>
