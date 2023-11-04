@@ -10,11 +10,7 @@ import { ToastContainer } from 'react-toastify';
 
 function App() {
   const location = useLocation();
-  const { activityStore, commonStore, userStore } = useStore();
-
-  useEffect(() => {
-    activityStore.loadActivities();
-  }, [activityStore])
+  const { commonStore, userStore } = useStore();
 
   useEffect(() => {
     if (commonStore.token) {

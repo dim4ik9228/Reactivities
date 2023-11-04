@@ -45,7 +45,7 @@ export default observer(function ActivityDetailedHeader({ activity }: Props) {
                         {dayjs(activity.date).format('dddd, DD/MM/YYYY HH:mm').toString()}
                     </Typography>
                     <Typography variant="subtitle1">
-                        Hosted by <strong><Link to={`/profiles/${activity.host?.username}`}>{activity.host?.displayName}</Link></strong>
+                        Hosted by <strong><Link to={`/profiles/${activity.hostUsername}`}>{activity.host?.displayName}</Link></strong>
                     </Typography>
                 </Box>
             </Box>

@@ -29,6 +29,7 @@ namespace Application.Activities
                 var activity = await context.Activities
                 .ProjectTo<ActivityDto>(mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync(x => x.Id == request.Id);
+                
                 return Result<ActivityDto>.Success(activity);
             }
         }

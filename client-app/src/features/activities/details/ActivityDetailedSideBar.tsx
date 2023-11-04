@@ -1,4 +1,4 @@
-import { Card, CardContent, Typography, List, ListItem, ListItemAvatar, Avatar, ListItemText, Divider, Box } from '@mui/material';
+import { Card, CardContent, Typography, List, ListItem, ListItemAvatar, Avatar, ListItemText, Box } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { Activity } from '../../../app/models/Activity';
 import { observer } from 'mobx-react-lite';

@@ -2,13 +2,17 @@ import { Box, Container, Grid, Typography } from "@mui/material";
 import ActivityList from "./ActivityList";
 import { useStore } from "../../../app/stores/store";
 import { observer } from "mobx-react-lite";
-import { Fragment } from "react";
+import { Fragment, useEffect } from "react";
 import ActivityFilter from "./ActivityFilter";
 
 export default observer(function ActivityDashboard() {
 
     const { activityStore } = useStore();
-    const { groupedActivities } = activityStore;
+    const { activityRegistry, loadActivities, groupedActivities } = activityStore;
+
+    useEffect(() => {
+        if (activityRegistry.size <= 1) loadActivities();
+    }, [loadActivities, activityRegistry.size])
 
     return (
         <Container sx={{ mt: 4 }}>
