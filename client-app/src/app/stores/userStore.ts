@@ -39,9 +39,14 @@ export default class UserStore {
         })
     }
 
+    setImage = (image: string) => {
+        if (this.user)
+            this.user.image = image;
+    }
+
     setRememberMe = (value: boolean) => {
         this.rememberMe = value;
-    }   
+    }
 
     private logUser = (user: User) => {
         store.commonStore.setToken(user.token, this.rememberMe);

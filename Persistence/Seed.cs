@@ -10,12 +10,29 @@ namespace Persistence
         {
             if (!userManager.Users.Any() && !context.Activities.Any())
             {
+                var photos = new List<Photo>()
+                {
+                    new()
+                    {
+                        Id = "todrjbpggdchhzm1sgkg",
+                        Url = "https://res.cloudinary.com/duormgto9/image/upload/v1699132706/todrjbpggdchhzm1sgkg.png",
+                        IsMain = true
+                    },
+                    new ()
+                    {
+                        Id = "ptwkbtzjnnych6sweys5",
+                        Url = "https://res.cloudinary.com/duormgto9/image/upload/v1695166717/ptwkbtzjnnych6sweys5.jpg",
+                        IsMain = true
+                    }
+
+                };
+
                 var users = new List<AppUser>
                 {
                     new() {
                         DisplayName = "Bob",
                         UserName = "bob",
-                        Email = "bob@test.com"
+                        Email = "bob@test.com",
                     },
                     new() {
                         DisplayName = "Jane",
@@ -28,6 +45,9 @@ namespace Persistence
                         Email = "tom@test.com"
                     },
                 };
+
+                users[0].Photos.Add(photos[0]);
+                users[1].Photos.Add(photos[1]);
 
                 foreach (var user in users)
                 {
@@ -119,11 +139,11 @@ namespace Persistence
                         {
                             new() {
                                 AppUser = users[1],
-                                IsHost = true                            
+                                IsHost = true
                             },
                             new() {
                                 AppUser = users[0],
-                                IsHost = false                            
+                                IsHost = false
                             },
                         }
                     },
@@ -138,7 +158,7 @@ namespace Persistence
                         {
                             new() {
                                 AppUser = users[1],
-                                IsHost = true                            
+                                IsHost = true
                             }
                         }
                     },
@@ -153,11 +173,11 @@ namespace Persistence
                         {
                             new() {
                                 AppUser = users[0],
-                                IsHost = true                            
+                                IsHost = true
                             },
                             new() {
                                 AppUser = users[1],
-                                IsHost = false                            
+                                IsHost = false
                             },
                         }
                     },
@@ -172,11 +192,11 @@ namespace Persistence
                         {
                             new() {
                                 AppUser = users[2],
-                                IsHost = true                            
+                                IsHost = true
                             },
                             new() {
                                 AppUser = users[1],
-                                IsHost = false                            
+                                IsHost = false
                             },
                         }
                     },
@@ -191,11 +211,11 @@ namespace Persistence
                         {
                             new() {
                                 AppUser = users[0],
-                                IsHost = true                            
+                                IsHost = true
                             },
                             new() {
                                 AppUser = users[2],
-                                IsHost = false                            
+                                IsHost = false
                             },
                         }
                     },
@@ -210,11 +230,11 @@ namespace Persistence
                         {
                             new() {
                                 AppUser = users[2],
-                                IsHost = true                            
+                                IsHost = true
                             },
                             new() {
                                 AppUser = users[1],
-                                IsHost = false                            
+                                IsHost = false
                             },
                         }
                     }

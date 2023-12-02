@@ -1,4 +1,4 @@
-import { Divider, Paper, Typography, Button, Box, Chip } from "@mui/material";
+import { Divider, Paper, Typography, Button, Box, Chip, Avatar } from "@mui/material";
 import { Activity } from "../../../app/models/Activity";
 import './fad.css'
 import { LoadingButton } from "@mui/lab";
@@ -42,10 +42,8 @@ export default observer(function ActivityList({ activity }: Props) {
                 <Box sx={{
                     width: "100%"
                 }}>
-                    <Box sx={{ display: "flex", width: "100%", mb: 2 }}>
-                        <span className="user-image">
-                            <img src={activity.host?.image || "/assets/user.png"} alt="Host Image" />
-                        </span>
+                    <Box sx={{ display: "flex", width: "100%", mb: 2, alignItems: "center", gap: 2 }}>
+                        <Avatar sx={{ height: "85px", width: "85px" }} src={activity.host?.image || "/assets/user.png"} alt={activity.hostUsername} />
                         <div>
                             <Typography className="ActivityTag" variant="h6">
                                 {activity.title}

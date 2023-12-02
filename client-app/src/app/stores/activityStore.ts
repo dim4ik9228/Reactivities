@@ -3,7 +3,6 @@ import { Activity, ActivityFormValues } from "../models/Activity";
 import agent from "../api/Agent";
 import { store } from "./store";
 import { Profile } from "../models/Profile";
-import UserStore from "./userStore";
 
 export default class ActivityStore {
     activityRegistry = new Map<string, Activity>();

@@ -18,10 +18,10 @@ namespace Application.Photos
         public class Handler : IRequestHandler<Command, Result<Photo>>
         {
             private readonly IUserAccessor userAccessor;
-            private readonly IPhotoAccesor photoAccesor;
+            private readonly IPhotoAccessor photoAccesor;
             private readonly DataContext context;
 
-            public Handler(DataContext context, IPhotoAccesor photoAccesor, IUserAccessor userAccessor)
+            public Handler(DataContext context, IPhotoAccessor photoAccesor, IUserAccessor userAccessor)
             {
                 this.context = context;
                 this.photoAccesor = photoAccesor;

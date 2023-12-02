@@ -17,11 +17,11 @@ export default observer(function ActivityListItemAttendee({ attendees }: Props) 
                 gap: "10px",
             }}>
             {attendees.map(attendee => (
-                <Box component={Link} to ={`profiles/${attendee.username}`}
+                <Box component={Link} to ={`/profiles/${attendee.username}`}
                     key={attendee.username}
                     sx={{ position: 'relative' }}
                 >
-                    <Avatar alt="Remy Sharp" src={attendee?.image} />
+                    <Avatar src={attendee?.image} />
                 </Box>
             ))}
         </Box>

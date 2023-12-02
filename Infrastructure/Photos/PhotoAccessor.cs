@@ -7,7 +7,7 @@ using Microsoft.Extensions.Options;
 
 namespace Infrastructure.Photos
 {
-    public class PhotoAccessor : IPhotoAccesor
+    public class PhotoAccessor : IPhotoAccessor
     {
         private readonly Cloudinary cloudinary;
         public PhotoAccessor(IOptions<CloudinarySettings> config)
@@ -41,7 +41,7 @@ namespace Infrastructure.Photos
                 return new PhotoUploadResult
                 {
                     PublicId = uploadReslt.PublicId,
-                    Url = uploadReslt.SecureUrl.ToString()   
+                    Url = uploadReslt.SecureUrl.ToString()
                 };
             }
 
