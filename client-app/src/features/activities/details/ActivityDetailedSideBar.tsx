@@ -25,12 +25,17 @@ export default observer(function ActivityDetailedSidebar({ activity: { attendees
                                 <Avatar sx={{ height: "55px", width: "55px" }} variant="square" src={attendee?.image} />
                             </ListItemAvatar>
                             <ListItemText sx={{ ml: 1 }}>
-                                <Typography sx={{ textDecoration: "none" }} variant="body1" component={Link} to={`/profiles/${attendee.image}`}>
+                                <Typography sx={{ textDecoration: "none" }} variant="body1" component={Link} to={`/profiles/${attendee.username}`}>
                                     {attendee.displayName}
                                 </Typography>
                                 <Fragment>
                                     {attendee.username === host?.username &&
                                         <Typography variant="body2" color="orange">Host</Typography>
+                                    }
+                                    {
+                                        attendee.following && (
+                                            <Typography variant="body2" color="orange">Following</Typography>
+                                        )
                                     }
                                 </Fragment>
                             </ListItemText>
@@ -38,6 +43,6 @@ export default observer(function ActivityDetailedSidebar({ activity: { attendees
                     ))}
                 </List>
             </CardContent>
-        </Card>
+        </Card >
     );
 })

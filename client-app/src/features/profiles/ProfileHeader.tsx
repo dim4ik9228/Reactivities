@@ -1,15 +1,13 @@
-import { Avatar, Box, Button, Grid, Paper, Typography } from "@mui/material";
-import { useState } from "react";
+import { Avatar, Box, Grid, Paper, Typography } from "@mui/material";
 import { Profile } from "../../app/models/Profile";
 import { observer } from "mobx-react-lite";
+import FollowButton from "./FollowButton";
 
 interface Props {
     profile: Profile;
 }
 
-export default observer(function ProfileCardHeader({ profile }: Props) {
-    const [isFollowing, setIsFollowing] = useState(false);
-
+export default observer(function ProfileHeader({ profile }: Props) {
 
     return (
         <Paper>
@@ -24,22 +22,15 @@ export default observer(function ProfileCardHeader({ profile }: Props) {
                     <Box sx={{ height: "180px", display: "flex", alignItems: "center", flexDirection: "column" }}>
                         <Box sx={{ display: "flex", justifyContent: "space-around", width: "100%", my: 1, mr: 2 }}>
                             <Box sx={{ display: "flex", alignItems: "center", flexDirection: "column" }}>
-                                <Typography variant="h2">5</Typography>
+                                <Typography variant="h2">{profile.followersCount}</Typography>
                                 <Typography variant="h5">Followers</Typography>
                             </Box>
                             <Box sx={{ display: "flex", alignItems: "center", flexDirection: "column", }}>
-                                <Typography variant="h2">42</Typography>
+                                <Typography variant="h2">{profile.followingCount}</Typography>
                                 <Typography variant="h5">Following</Typography>
                             </Box>
                         </Box>
-                        <Button
-                            fullWidth
-                            variant="contained"
-                            color={isFollowing ? 'error' : 'primary'}
-                            onClick={() => setIsFollowing((prevFollowing) => !prevFollowing)}
-                        >
-                            {isFollowing ? 'Unfollow' : 'Follow'}
-                        </Button>
+                        <FollowButton profile={profile} />
                     </Box>
                 </Grid>
             </Grid>

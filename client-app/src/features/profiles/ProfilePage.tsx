@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import ProfileCardHeader from "./ProfileCardHeader";
+import ProfileCardHeader from "./ProfileHeader";
 import ProfileContent from "./ProfileContent";
 import { observer } from "mobx-react-lite";
 import { useParams } from "react-router-dom";
@@ -10,13 +10,16 @@ import LoadingComponent from "../../app/layout/LoadingComponent";
 export default observer(function ProfilePage() {
     const { username } = useParams();
     const { profileStore } = useStore();
-    const { loadingProfile, loadProfile, profile } = profileStore;
+    const { loadingProfile, loadProfile, profile, setActiveTab } = profileStore;
 
     useEffect(() => {
         if (username)
             loadProfile(username);
+        return () => {
+            setActiveTab(0);
+        }
 
-    }, [loadProfile, username])
+    }, [loadProfile, username, setActiveTab])
 
     if (loadingProfile)
         return <LoadingComponent />
@@ -26,7 +29,7 @@ export default observer(function ProfilePage() {
             {profile &&
                 <>
                     <ProfileCardHeader profile={profile} />
-                    <ProfileContent profile={profile} index={0} value={0} />
+                    <ProfileContent profile={profile} />
                 </>
 
             }

@@ -5,6 +5,8 @@ import { Profile } from "../../app/models/Profile";
 import ProfilePhotos from "./ProfilePhotos";
 import TabPage from "../../app/common/tabPage/TabPage";
 import ProfileAbout from "./ProfileAbout";
+import ProfileFollowings from "./ProfileFollowings";
+import { useStore } from "../../app/stores/store";
 
 function allyProps(index: number) {
     return {
@@ -18,10 +20,13 @@ interface Props {
 }
 
 export default observer(function ProfileContent({ profile }: Props) {
+    const { profileStore } = useStore();
+
     const [value, setValue] = useState(0);
 
     const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
         setValue(newValue);
+        profileStore.setActiveTab(newValue);
     };
 
     return (
@@ -46,10 +51,10 @@ export default observer(function ProfileContent({ profile }: Props) {
                     <Typography>Events</Typography>
                 </TabPage>
                 <TabPage value={value} index={3}>
-                    <Typography>Followers</Typography>
+                    <ProfileFollowings />
                 </TabPage>
                 <TabPage value={value} index={4}>
-                    <Typography>Following</Typography>
+                    <ProfileFollowings />
                 </TabPage>
             </Box>
         </Paper>
