@@ -3,36 +3,10 @@ import { observer } from "mobx-react-lite";
 import { useState } from "react";
 import { Profile } from "../../app/models/Profile";
 import ProfilePhotos from "./ProfilePhotos";
+import TabPage from "../../app/common/tabPage/TabPage";
+import ProfileAbout from "./ProfileAbout";
 
-interface Props {
-    children?: React.ReactNode;
-    index: number;
-    value: number;
-}
-
-
-function TabPage(props: Props) {
-    const { children, value, index, ...other } = props;
-
-    return (
-        <div
-            style={{ minHeight: "320px" }}
-            role="tabpanel"
-            hidden={value !== index}
-            id={`simple-tabpanel-${index}`}
-            aria-labelledby={`simple-tab-${index}`}
-            {...other}
-        >
-            {value === index && (
-                <Box sx={{ p: 3 }}>
-                    {children}
-                </Box>
-            )}
-        </div>
-    );
-}
-
-function a11yProps(index: number) {
+function allyProps(index: number) {
     return {
         id: `simple-tab-${index}`,
         'aria-controls': `simple-tabpanel-${index}`,
@@ -55,28 +29,26 @@ export default observer(function ProfileContent({ profile }: Props) {
             <Box sx={{ width: '100%' }}>
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                     <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-                        <Tab label="About" {...a11yProps(0)} />
-                        <Tab label="Photos" {...a11yProps(1)} />
-                        <Tab label="Events" {...a11yProps(2)} />
-                        <Tab label="Followers" {...a11yProps(3)} />
-                        <Tab label="Following" {...a11yProps(4)} />
+                        <Tab label="About" {...allyProps(0)} />
+                        <Tab label="Photos" {...allyProps(1)} />
+                        <Tab label="Events" {...allyProps(2)} />
+                        <Tab label="Followers" {...allyProps(3)} />
+                        <Tab label="Following" {...allyProps(4)} />
                     </Tabs>
                 </Box>
-                <TabPage value={value} index={0} profile={profile}>
-                    <Typography>
-                        {profile.bio ? profile.bio : "Profile bio is empty"}
-                    </Typography>
+                <TabPage value={value} index={0}>
+                    <ProfileAbout />
                 </TabPage>
-                <TabPage value={value} index={1} profile={profile}>
+                <TabPage value={value} index={1}>
                     <ProfilePhotos profile={profile} />
                 </TabPage>
-                <TabPage value={value} index={2} profile={profile}>
+                <TabPage value={value} index={2}>
                     <Typography>Events</Typography>
                 </TabPage>
-                <TabPage value={value} index={3} profile={profile}>
+                <TabPage value={value} index={3}>
                     <Typography>Followers</Typography>
                 </TabPage>
-                <TabPage value={value} index={4} profile={profile}>
+                <TabPage value={value} index={4}>
                     <Typography>Following</Typography>
                 </TabPage>
             </Box>

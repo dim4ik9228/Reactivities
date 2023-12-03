@@ -33,11 +33,12 @@ export default observer(function ProfilePhotos({ profile }: Props) {
 
     return (
         <Grid>
-            <Grid container direction="row" justifyContent="flex-end">
+            <Grid container direction="row">
                 <Grid item xs={isCurrentUserProfileOwner ? 10 : 12}>
                     <Typography variant="h5">Photos</Typography>
                 </Grid>
-                {isCurrentUserProfileOwner &&
+                {
+                    isCurrentUserProfileOwner &&
                     <Grid item xs={2} sx={{ display: "flex", justifyContent: "flex-end" }} >
                         <Button
                             variant="outlined"

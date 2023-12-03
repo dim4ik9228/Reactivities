@@ -48,6 +48,10 @@ export default class UserStore {
         this.rememberMe = value;
     }
 
+    setDisplayName = (name: string) => {
+        if (this.user) this.user.displayName = name;
+    }
+
     private logUser = (user: User) => {
         store.commonStore.setToken(user.token, this.rememberMe);
         runInAction(() => this.user = user);
