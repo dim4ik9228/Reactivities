@@ -1,7 +1,30 @@
-import { Card, CardContent, Grid, Typography, List, ListItem, ListItemAvatar, Avatar, TextField, Button, Divider, Box } from '@mui/material';
+import { Card, CardContent, Grid, Typography, List, ListItem, ListItemAvatar, Avatar, Box } from '@mui/material';
 import { observer } from 'mobx-react-lite';
+import { useStore } from '../../../app/stores/store';
+import { useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { Form, Formik } from 'formik';
+import TextInput from '../../../app/common/form/TextInput';
+import { LoadingButton } from '@mui/lab';
+import dayjs from 'dayjs';
+import * as Yup from "yup";
 
-export default observer(function ActivityDetailedChat() {
+interface Props {
+    activityId: string;
+}
+
+export default observer(function ActivityDetailedChat({ activityId }: Props) {
+    const { commentStore } = useStore();
+
+    useEffect(() => {
+        if (activityId) {
+            commentStore.createHubConnection(activityId);
+        }
+        return () => {
+            commentStore.clearComments();
+        }
+    }, [commentStore, activityId])
+
     return (
         <Card>
             <CardContent>
@@ -10,52 +33,56 @@ export default observer(function ActivityDetailedChat() {
                         <Typography variant="h6" align="center" >
                             Chat about this event
                         </Typography>
-                        <Divider />
                     </Grid>
                     <Grid item xs={12}>
                         <List>
-                            <ListItem>
-                                <ListItemAvatar>
-                                    <Avatar src="/assets/user.png" />
-                                </ListItemAvatar>
-                                <Box>
-                                    <Box sx={{ display: "flex", gap: 1 }}>
-                                        <Typography variant="subtitle1">Matt</Typography>
-                                        <Typography variant="subtitle2" sx={{ mt: "3px" }}>Today at 5:42 PM</Typography>
-                                    </Box>
-                                    <Typography variant="body1">How artistic!</Typography>
-                                    <Typography variant="body2" component="a">Reply</Typography>
-                                </Box>
-                            </ListItem>
-                            <ListItem>
-                                <ListItemAvatar>
-                                    <Avatar src="/assets/user.png" />
-                                </ListItemAvatar>
-                                <Box>
-                                    <Box sx={{ display: "flex", gap: 1 }}>
-                                        <Typography variant="subtitle1">Joe Henderson</Typography>
-                                        <Typography variant="subtitle2">5 days ago</Typography>
-                                    </Box>
-                                    <Typography variant="body1">Dude this is awesome!</Typography>
-                                    <Typography variant="body2" component="a">Reply</Typography>
-                                </Box>
-                            </ListItem>
+                            {
+                                commentStore.comments.map(comment => (
+                                    <ListItem key={comment.id} sx={{ display: "flex", alignItems:"flex-start" }}>
+                                        <ListItemAvatar>
+                                            <Avatar src={comment.image}
+                                                component={Link} to={`/profiles/${comment.username}`} />
+                                        </ListItemAvatar>
+                                        <Box>
+                                            <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
+                                                <Typography component={Link} to={`/profiles/${comment.username}`}
+                                                    variant="subtitle1"
+                                                >
+                                                    {comment.displayName}
+                                                </Typography>
+                                                <Typography variant="subtitle2">{dayjs(comment.createdAt).format('dddd, DD/MM/YYYY HH:mm').toString()}</Typography>
+                                            </Box>
+                                            <Typography sx={{ whiteSpace: "pre-wrap" }} variant="body1">{comment.body}</Typography>
+                                        </Box>
+                                    </ListItem>
+                                ))
+                            }
+
                         </List>
                     </Grid>
                     <Grid item xs={12}>
-                        <TextField
-                            label="Add Reply"
-                            variant="outlined"
-                            fullWidth
-                        />
-                    </Grid>
-                    <Grid item xs={12} my="10px">
-                        <Button
-                            variant="contained"
-                            color="primary"
+                        <Formik
+                            onSubmit={(values, { resetForm }) =>
+                                commentStore.addComment(values).then(() => resetForm())}
+                            initialValues={{ body: '' }}
+                            validationSchema={Yup.object({
+                                body: Yup.string().required()
+                            })}
                         >
-                            Add Reply
-                        </Button>
+                            {({ isSubmitting, isValid }) => (
+                                <Form>
+                                    <TextInput name="body" placeholder='Add comment' ml />
+                                    <LoadingButton
+                                        loading={isSubmitting}
+                                        disabled={isSubmitting || !isValid}
+                                        variant="contained"
+                                        type="submit"
+                                    >
+                                        Add comment
+                                    </LoadingButton>
+                                </Form>
+                            )}
+                        </Formik>
                     </Grid>
                 </Grid>
             </CardContent>

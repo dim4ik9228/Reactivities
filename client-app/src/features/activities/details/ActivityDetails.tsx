@@ -30,10 +30,10 @@ export default observer(function ActivityDetails() {
             <Grid item xs={8}>
                 <ActivityDetailedHeader activity={activity} />
                 <ActivityDetailedInfo activity={activity} />
-                <ActivityDetailedChat />
+                <ActivityDetailedChat activityId={activity.id} />
             </Grid>
             <Grid item xs={4}>
-                <ActivityDetailedSideBar activity={activity!}/>
+                <ActivityDetailedSideBar activity={activity!} />
             </Grid>
         </Grid>
     )

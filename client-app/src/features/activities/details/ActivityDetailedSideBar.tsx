@@ -24,20 +24,16 @@ export default observer(function ActivityDetailedSidebar({ activity: { attendees
                             <ListItemAvatar>
                                 <Avatar sx={{ height: "55px", width: "55px" }} variant="square" src={attendee?.image} />
                             </ListItemAvatar>
-                            <ListItemText sx={{ ml: 1 }}
-                                primary={
-                                    <Typography sx={{ textDecoration: "none" }} variant="body1" component={Link} to={`/profiles/${attendee.image}`}>
-                                        {attendee.displayName}
-                                    </Typography>
-                                }
-                                secondary={
-                                    <Fragment>
-                                        {attendee.username === host?.username &&
-                                            <Typography variant="body2" color="orange">Host</Typography>
-                                        }
-                                    </Fragment>
-                                }
-                            />
+                            <ListItemText sx={{ ml: 1 }}>
+                                <Typography sx={{ textDecoration: "none" }} variant="body1" component={Link} to={`/profiles/${attendee.image}`}>
+                                    {attendee.displayName}
+                                </Typography>
+                                <Fragment>
+                                    {attendee.username === host?.username &&
+                                        <Typography variant="body2" color="orange">Host</Typography>
+                                    }
+                                </Fragment>
+                            </ListItemText>
                         </ListItem>
                     ))}
                 </List>
