@@ -3,16 +3,18 @@ using Application.Interfaces;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Persistence;
 
 namespace Application.Activities
 {
     public class List
     {
-        public class Query : IRequest<Result<List<ActivityDto>>> { }
+        public class Query : IRequest<Result<PagedList<ActivityDto>>>
+        {
+            public PagingParams Params { get; set; }
+        }
 
-        public class Handler : IRequestHandler<Query, Result<List<ActivityDto>>>
+        public class Handler : IRequestHandler<Query, Result<PagedList<ActivityDto>>>
         {
             private readonly DataContext context;
             private readonly IMapper mapper;
@@ -24,14 +26,20 @@ namespace Application.Activities
                 this.userAccessor = userAccessor;
                 this.context = context;
             }
-            public async Task<Result<List<ActivityDto>>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<PagedList<ActivityDto>>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var activities = await context.Activities
+                var query = context.Activities
                     .ProjectTo<ActivityDto>(mapper.ConfigurationProvider,
                         new { currentUsername = userAccessor.GetUsername() })
-                    .ToListAsync();
+                    .OrderBy(d => d.Date)
+                    .AsQueryable();
 
-                return Result<List<ActivityDto>>.Success(activities);
+
+
+                return Result<PagedList<ActivityDto>>.Success(
+                    await PagedList<ActivityDto>.CreateAsync(query, request.Params.PageNumber,
+                        request.Params.PageSize)
+                );
             }
         }
     }

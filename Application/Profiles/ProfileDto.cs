@@ -1,4 +1,3 @@
-using Application.Activities;
 using Domain;
 
 namespace Application.Profiles

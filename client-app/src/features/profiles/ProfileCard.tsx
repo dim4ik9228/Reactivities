@@ -11,7 +11,7 @@ interface Props {
 
 export default observer(function ProfileCard({ profile }: Props) {
     return (
-        <Card sx={{ maxWidth: "320px", maxHeight: "370px" }}>
+        <Card sx={{ maxWidth: "320px", maxHeight: "400px" }}>
             <CardMedia
                 component={Link} to={`/profiles/${profile.username}`}
                 sx={{ height: "200px" }}
