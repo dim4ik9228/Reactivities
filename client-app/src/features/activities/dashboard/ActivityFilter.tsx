@@ -1,8 +1,12 @@
 import { Box, Divider, ListItemText, MenuItem, MenuList, Paper, Typography } from "@mui/material";
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import Calendar from "react-calendar";
+import { observer } from "mobx-react-lite";
+import { useStore } from "../../../app/stores/store";
 
-export default function ActivityFilter() {
+export default observer(function ActivityFilter() {
+    const { activityStore: { predicate, setPredicate } } = useStore();
+
     return (
         <>
             <Paper sx={{ my: "27px" }}>
@@ -12,19 +16,33 @@ export default function ActivityFilter() {
                         <Typography>Filters</Typography>
                     </Box>
                     <Divider />
-                    <MenuItem>
+                    <MenuItem
+                        selected={predicate.has('all')}
+                        onClick={() => setPredicate('all', 'true')}
+                    >
                         <ListItemText>All activities</ListItemText>
                     </MenuItem>
-                    <MenuItem>
+                    <MenuItem
+                        selected={predicate.has('isGoing')}
+                        onClick={() => setPredicate('isGoing', 'true')}
+                    >
                         <ListItemText>I'm going</ListItemText>
                     </MenuItem>
-                    <MenuItem>
+                    <MenuItem
+                        selected={predicate.has('isHost')}
+                        onClick={() => setPredicate('isHost', 'true')}
+                    >
                         <ListItemText>I'm hosting</ListItemText>
                     </MenuItem>
                 </MenuList>
             </Paper>
-            <Calendar />
+            <Calendar
+                onChange={(date) => {
+                    setPredicate('startDate', date as Date)
+                }}
+                value={predicate.get('startDate') ? predicate.get('startDate') : null}
+            />
         </>
 
     )
-}
+})

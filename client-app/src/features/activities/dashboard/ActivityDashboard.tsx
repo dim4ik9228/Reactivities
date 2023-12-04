@@ -1,14 +1,23 @@
-import { Box, Container, Grid, Typography } from "@mui/material";
-import ActivityList from "./ActivityList";
+import { Box, CircularProgress, Container, Grid } from "@mui/material";
 import { useStore } from "../../../app/stores/store";
 import { observer } from "mobx-react-lite";
-import { Fragment, useEffect } from "react";
+import { useEffect, useState } from "react";
 import ActivityFilter from "./ActivityFilter";
+import { PagingParams } from "../../../app/models/Pagination";
+import InfiniteScroll from "react-infinite-scroller";
+import ActivityList from "./ActivityList";
 
 export default observer(function ActivityDashboard() {
 
     const { activityStore } = useStore();
-    const { activityRegistry, loadActivities, groupedActivities } = activityStore;
+    const { activityRegistry, loadActivities, setPagingParams, pagination } = activityStore;
+    const [loadingNext, setLoadingNext] = useState(false);
+
+    function handleLoadingNext() {
+        setLoadingNext(true);
+        setPagingParams(new PagingParams(pagination!.currentPage + 1));
+        loadActivities().then(() => setLoadingNext(false));
+    }
 
     useEffect(() => {
         if (activityRegistry.size <= 1) loadActivities();
@@ -25,38 +34,36 @@ export default observer(function ActivityDashboard() {
                 spacing={4}
             >
                 <Grid item xs={7}>
-                    {groupedActivities.map(([group, activities]) => (
-                        <Fragment key={group}>
-                            <Grid container direction="column" justifyContent="flex-end">
-                                <Typography variant="subtitle1"
-                                    sx={{
-                                        
-                                        color: "teal"
-                                    }}
-                                >
-                                    {group}
-                                </Typography>
-                                <Box
-                                    justifyContent="flex-end"
-                                    sx={{
-                                        mb: "20px",
-                                    }}
-                                >
-                                    {activities.map((activity) => (
-                                        <Grid item xs={12} key={activity.id}>
-                                            <ActivityList
-                                                activity={activity}
-                                            />
-                                        </Grid>
-                                    ))}
+                    {
+                        activityStore.loadingInitial && activityRegistry.size === 0 && !loadingNext ? (
+                            <>
+                                <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", height: "800px" }}>
+                                    <CircularProgress />
                                 </Box>
-                            </Grid>
-                        </Fragment>
-                    ))}
+                            </>
+                        ) : (
+                            <InfiniteScroll
+                                pageStart={0}
+                                loadMore={handleLoadingNext}
+                                hasMore={!loadingNext && !!pagination && pagination.currentPage < pagination.totalPages}
+                                initialLoad={false}
+                            >
+                                <ActivityList />
+                            </InfiniteScroll>
+                        )
+                    }
+
 
                 </Grid>
                 <Grid item xs={5}>
                     <ActivityFilter />
+                </Grid>
+                <Grid item xs={12} sx={{ display: "flex", justifyContent: "center" }}>
+                    {
+                        loadingNext && (
+                            <CircularProgress />
+                        )
+                    }
                 </Grid>
             </Grid>
         </Container>

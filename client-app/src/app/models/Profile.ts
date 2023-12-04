@@ -1,3 +1,4 @@
+import { Activity } from "./Activity";
 import { User } from "./User";
 
 export interface Profile {
@@ -7,8 +8,9 @@ export interface Profile {
     bio?: string;
     followersCount: number;
     followingCount: number;
-    following: boolean; 
+    following: boolean;
     photos?: Photo[];
+    activities: Activity[];
 }
 
 export class Profile implements Profile {

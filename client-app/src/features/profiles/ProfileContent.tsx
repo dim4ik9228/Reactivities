@@ -1,4 +1,4 @@
-import { Box, Paper, Tab, Tabs, Typography } from "@mui/material";
+import { Box, Paper, Tab, Tabs } from "@mui/material";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
 import { Profile } from "../../app/models/Profile";
@@ -7,6 +7,7 @@ import TabPage from "../../app/common/tabPage/TabPage";
 import ProfileAbout from "./ProfileAbout";
 import ProfileFollowings from "./ProfileFollowings";
 import { useStore } from "../../app/stores/store";
+import ProfileEvents from "./ProfileEvents";
 
 function allyProps(index: number) {
     return {
@@ -48,7 +49,7 @@ export default observer(function ProfileContent({ profile }: Props) {
                     <ProfilePhotos profile={profile} />
                 </TabPage>
                 <TabPage value={value} index={2}>
-                    <Typography>Events</Typography>
+                    <ProfileEvents profile={profile} />
                 </TabPage>
                 <TabPage value={value} index={3}>
                     <ProfileFollowings />
